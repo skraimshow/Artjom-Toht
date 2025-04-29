@@ -4,10 +4,9 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- none
+- main
 
-pool:
-  vmImage: 'windows-latest'
+pool: Local_AT
 
 variables:
   buildPlatform: 'Any CPU'
