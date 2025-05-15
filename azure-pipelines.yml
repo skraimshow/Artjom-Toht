@@ -11,13 +11,21 @@ pool: Local_AT
 variables:
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  solution: '**/skraimshow.Artjom-Toht.sln'
-  project: '**/skraimshow.Artjom-Toht.csproj'
+  solution: '**/*.sln'
+  project: '**/*.csproj'
 
 steps:
-
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: 'kv-service-connection'
+    KeyVaultName: 'rest-api-kv'
+    SecretsFilter: '*'
+    RunAsPreJob: true
+    
 - task: NuGetToolInstaller@1
-  name: 'NuGetToolInstaller'
+  inputs:
+      restoreSolution: '$(solution)'
+  #name: 'NuGetToolInstaller'
   displayName: 'NuGet tool installer'
   
 - task: NuGetCommand@2
@@ -36,3 +44,21 @@ steps:
     projects: '$(solution)'
     arguments: '--configuration $(BuildConfiguration)'
 
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(build.artifactStagingDirectory)/publish'
+    artifactName: 'drop'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'kv-service-connection'
+    appType: 'webApp'
+    appName: ''
+    package: '' #$(build.artifactStagingDirectory)/publish/src.zip
+    deploymentMethod: 'auto'
