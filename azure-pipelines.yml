@@ -54,6 +54,6 @@ steps:
   inputs:
     azureSubscription: 'kv-service-connection'
     appType: 'webApp'
-    appName: ''
+    appName: 'toht-web-app'
     package: '' #$(build.artifactStagingDirectory)/publish/src.zip
     deploymentMethod: 'auto'
