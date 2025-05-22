@@ -49,11 +49,15 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(build.artifactStagingDirectory)/publish'
+    artifactName: 'drop'
 
 - task: AzureWebApp@1
   inputs:
     azureSubscription: 'kv-service-connection'
     appType: 'webApp'
     appName: 'toht-web-app'
-    package: '' #$(build.artifactStagingDirectory)/publish/src.zip
+    package: '' #$(build.artifactStagingDirectory)/publish/*.zip
     deploymentMethod: 'auto'
