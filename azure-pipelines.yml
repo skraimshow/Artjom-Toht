@@ -49,10 +49,11 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: PublishBuildArtifacts@1
+- task: PublishPipelineArtifact@0
+  displayName: 'Publish pipeline artifact'
   inputs:
-    pathToPublish: '$(build.artifactStagingDirectory)/publish'
     artifactName: 'drop'
+    targetPath: '$(Build.ArtifactStagingDirectory)'
 
 - task: AzureWebApp@1
   inputs:
